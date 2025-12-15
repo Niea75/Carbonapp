@@ -46,42 +46,34 @@ export const AppStateProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const [quests, setQuests] = useState<Quest[]>(randomizeQuests(DAILY_QUESTS));
   const [feed, setFeed] = useState<FeedItem[]>([]);
   const [streak, setStreak] = useState(0);
-  const [storageHealthy, setStorageHealthy] = useState(true);
 
   useEffect(() => {
     const bootstrap = async () => {
-      try {
-        const consentString = await AsyncStorage.getItem(CONSENT_STORAGE_KEY);
-        if (consentString) {
-          const storedConsent: UserProfile = JSON.parse(consentString);
-          const oneYearMs = 365 * 24 * 60 * 60 * 1000;
-          const expired = Date.now() - new Date(storedConsent.consentedAt).getTime() > oneYearMs;
-          if (storedConsent.consentVersion !== CONSENT_VERSION || expired) {
-            await AsyncStorage.removeItem(CONSENT_STORAGE_KEY);
-            setUserProfile(null);
-          } else {
-            setUserProfile(storedConsent);
-          }
+      const consentString = await AsyncStorage.getItem(CONSENT_STORAGE_KEY);
+      if (consentString) {
+        const storedConsent: UserProfile = JSON.parse(consentString);
+        const oneYearMs = 365 * 24 * 60 * 60 * 1000;
+        const expired = Date.now() - new Date(storedConsent.consentedAt).getTime() > oneYearMs;
+        if (storedConsent.consentVersion !== CONSENT_VERSION || expired) {
+          await AsyncStorage.removeItem(CONSENT_STORAGE_KEY);
+          setUserProfile(null);
+        } else {
+          setUserProfile(storedConsent);
         }
-        const activityString = await AsyncStorage.getItem(ACTIVITY_STORAGE_KEY);
-        if (activityString) {
-          const storedActivities: ActivityLog[] = JSON.parse(activityString);
-          setActivities(storedActivities);
-          rebuildStreak(storedActivities);
-        }
-      } catch (error) {
-        console.error('Failed to load persisted data; continuing with in-memory state.', error);
-        setStorageHealthy(false);
-      } finally {
-        setConsentChecked(true);
       }
+      const activityString = await AsyncStorage.getItem(ACTIVITY_STORAGE_KEY);
+      if (activityString) {
+        const storedActivities: ActivityLog[] = JSON.parse(activityString);
+        setActivities(storedActivities);
+        rebuildStreak(storedActivities);
+      }
+      setConsentChecked(true);
     };
 
     bootstrap();
   }, []);
 
   useEffect(() => {
-    if (!storageHealthy) return;
     AsyncStorage.setItem(ACTIVITY_STORAGE_KEY, JSON.stringify(activities));
   }, [activities]);
 
@@ -91,9 +83,7 @@ export const AppStateProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       consentedAt: new Date().toISOString(),
       consentVersion: CONSENT_VERSION,
     };
-    if (storageHealthy) {
-      await AsyncStorage.setItem(CONSENT_STORAGE_KEY, JSON.stringify(profile));
-    }
+    await AsyncStorage.setItem(CONSENT_STORAGE_KEY, JSON.stringify(profile));
     setUserProfile(profile);
   };
 

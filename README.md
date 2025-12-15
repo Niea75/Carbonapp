@@ -13,28 +13,7 @@
 ## 개발/실행
 1. 의존성 설치: `npm install`
 2. 개발 서버 시작: `npm start` (Expo)
-3. 웹에서 확인: `npm run web` (브라우저에서 Expo 웹 번들 확인)
-4. Expo Go 앱 또는 에뮬레이터에서 실행합니다.
-
-### `npm install` 중 403 오류가 날 때
-
-프로xy 환경에서 npm이 `403 Forbidden - GET https://registry.npmjs.org/...` 에러를 반환하는 경우가 있습니다. 아래 스크립트가 현재 셸의 프록시 환경 변수를 일시적으로 비우고 공용 npm 레지스트리를 강제로 사용하도록 한 뒤 설치를 재시도합니다.
-
-```
-./scripts/install-without-proxy.sh
-```
-
-설정 변경은 현재 터미널 세션에만 적용됩니다. 403이 계속되면 현재 셸에 남아 있는 프록시/인증서 환경 변수를 먼저 확인하세요.
-
-```
-./scripts/check-proxy-env.sh
-```
-
-만약 웹 실행 시 `react-native-web` 등의 패키지 누락 오류가 발생한다면 다음 명령으로 웹 필수 패키지를 설치하세요(오프라인 모드에서는 자동 추가가 건너뛰어질 수 있습니다).
-
-```
-npx expo install react-native-web@~0.19.10 react-dom@18.2.0 @expo/metro-runtime@~3.2.3
-```
+3. Expo Go 앱 또는 에뮬레이터에서 실행합니다.
 
 ## 폴더 구조
 - `App.tsx`: 내비게이션과 동의 플로우 루트
