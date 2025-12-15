@@ -1,9 +1,7 @@
-import 'react-native-gesture-handler';
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { Text } from 'react-native';
 import ActivityScreen from './src/screens/ActivityScreen';
 import QuestScreen from './src/screens/QuestScreen';
@@ -47,14 +45,12 @@ const Root = () => {
 
 export default function App() {
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      <SafeAreaProvider>
-        <AppStateProvider>
-          <NavigationContainer>
-            <Root />
-          </NavigationContainer>
-        </AppStateProvider>
-      </SafeAreaProvider>
-    </GestureHandlerRootView>
+    <SafeAreaProvider>
+      <AppStateProvider>
+        <NavigationContainer>
+          <Root />
+        </NavigationContainer>
+      </AppStateProvider>
+    </SafeAreaProvider>
   );
 }
